@@ -40,7 +40,8 @@ namespace SpecFlowMasterClass.SpecOverflow.Specs.WebUI.Drivers
         public UserReferenceModel GetCurrentUser()
         {
             var userName = GetHomePageModel().UserName;
-            return string.IsNullOrWhiteSpace(userName) ? null : new() {Name = userName};
+      
+            return string.IsNullOrWhiteSpace(userName) ? null : (UserReferenceModel) new() {Name = userName};
         }
 
         private IEnumerable<QuestionSummaryModel> ParseLatestQuestions()

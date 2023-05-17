@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpecFlowMasterClass.SpecOverflow.Web.DataAccess;
 using SpecFlowMasterClass.SpecOverflow.Web.Services;
@@ -7,7 +8,7 @@ using SpecFlowMasterClass.SpecOverflow.Web.Services;
 namespace SpecFlowMasterClass.SpecOverflow.Tests
 {
     [TestClass]
-    public class ModelTransformationServiceTests
+    public class ModelTransformationServiceTests: JustChecking.CheckBaseClass
     {
         private readonly DataContext _dataContext = new DataContext(new DataContext.InMemoryPersist());
 
@@ -31,13 +32,18 @@ namespace SpecFlowMasterClass.SpecOverflow.Tests
             var sut = new ModelTransformationService(_dataContext);
 
             var result = sut.ToQuestionDetails(question);
-            
-            Assert.AreEqual(question.Id, result.Id);
-            Assert.AreEqual(question.Title, result.Title);
-            Assert.AreEqual(question.Body, result.Body);
-            Assert.AreEqual(question.AskedAt, result.AskedAt);
-            Assert.AreEqual(question.Views, result.Views);
-            Assert.AreEqual(question.Votes, result.Votes);
+          
+            //question.Id.Should().NotBe(result.Id,because: "Things should be the same");    
+            //Assert.AreNotEqual(question.Id, result.Id);
+            Check("Question Details should keep simple values")
+              .CheckFailsIf().AreNotEqual(question.Id, result.Id, "Things should be the same");
+            Check("Some other thing I want to check in the same context")
+                .CheckFailsIf().IsNull(null, "This should not be null here");
+            //Assert.AreEqual(question.Title, result.Title);
+            //Assert.AreEqual(question.Body, result.Body);
+            //Assert.AreEqual(question.AskedAt, result.AskedAt);
+            //Assert.AreEqual(question.Views, result.Views);
+            //Assert.AreEqual(question.Votes, result.Votes);
         }
 
         [TestMethod]
